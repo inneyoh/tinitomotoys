@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<!--
+  ================================================================
+   TiniTomo Gacha Rush — base prototype
+  ----------------------------------------------------------------
+   FILE MAP (open these to edit):
+     css/style.css       → all looks, positions & layouts (sectioned)
+     js/config.js        → numbers you tweak: prices, rewards, characters
+     js/save.js          → save / load player data (localStorage)
+     js/ui.js            → HUD (money/coins), pop-ups, picker, toasts
+     js/sticker.js       → sticker drawing + 360° prismatic viewer
+     js/scenes.js        → scene slider (drag / arrows / dots)
+     js/calls.js         → Scene 1: call rules (hold, message, transfer, grading)
+     js/pc.js            → Scene 1: monitor apps (Phone Book, Messenger, Memo, Auto Reply)
+     js/market.js        → Scene 1: Sticker Market app (trade stickers)
+     js/office.js        → Scene 1: office desk + telephone controls
+     js/gacha.js         → Scene 2: gacha machine + blindboxes
+     js/book.js          → Scene 3: sticker book
+     js/main.js          → boots everything
+     assets/             → all images (stickers, office, gacha, book, ui, icon)
+     manifest.webmanifest → app name + icons for "Add to Home Screen"
+  ================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffb8cc">
+<title>TiniTomo Gacha Rush</title>
+<!-- app icon (assets/icon/) — browser tab, iPhone home screen, Android install -->
+<link rel="icon" href="assets/icon/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/icon/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/icon/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="TiniTomo">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     1. SHARED HUD (top-right on every scene)
+     ============================================================ -->
+<div id="hud">
+  <div class="hud-pill" id="hud-money"><span class="hud-label">$</span><span id="hud-money-val">0</span></div>
+  <div class="hud-pill" id="hud-coins"><img src="assets/ui/coin.svg" alt="" draggable="false"><span id="hud-coins-val">0</span></div>
+</div>
+
+<!-- ============================================================
+     2. SCENE VIEWPORT  (order: office → gacha → collection)
+     ============================================================ -->
+<div id="viewport">
+  <div id="track">
+
+    <!-- ---------- SCENE 1 : OFFICE ---------- -->
+    <section class="scene" id="scene-office" data-name="Office">
+      <div class="bg bg-office"></div>
+      <div class="stage">
+        <!-- plant (sits behind the phone) -->
+        <button class="o-plant" id="o-plant">
+          <img class="o-flowers" src="assets/office/flowers.svg" alt="" draggable="false">
+          <img class="o-pot" src="assets/office/pot.svg" alt="" draggable="false">
+        </button>
+        <!-- riser + monitor -->
+        <div class="o-riser">
+          <img src="assets/office/riser.svg" alt="" draggable="false">
+          <div class="o-loaders" id="o-loaders"></div>   <!-- top loaders (stickers) -->
+        </div>
+        <div class="o-monitor" id="o-monitor">
+          <img src="assets/office/monitor.svg" alt="" draggable="false">
+          <div class="o-screen" id="o-screen">
+            <div class="o-screen-off">tap to wake</div>
+            <div class="o-desktop">
+              <div class="o-desktop-bar"><span>TiniTomo OS</span><span id="o-stats">✓0 ✗0</span><span id="o-clock">09:00</span></div>
+              <div class="o-apps">
+                <button class="o-app" data-app="phonebook"><i>📒</i><span>Phone Book</span></button>
+                <button class="o-app" data-app="messenger"><i>💬</i><span>Messenger</span></button>
+                <button class="o-app" data-app="memo"><i>📝</i><span>Memo</span></button>
+                <button class="o-app" data-app="auto"><i>🤖</i><span>Auto Reply</span><b id="o-auto-state">OFF</b></button>
+                <button class="o-app" data-app="market"><i>🏪</i><span>Sticker Market</span><b id="o-market-state"></b></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- photo frame -->
+        <div class="o-frame" id="o-frame" role="button"><div class="o-frame-inner"><span class="o-frame-empty">♡<br>fav</span><img alt="" draggable="false"></div></div>
+        <!-- keyboard + mouse (non-interactive) -->
+        <img class="o-keyboard" src="assets/office/keyboard.svg" alt="" draggable="false">
+        <img class="o-mouse" src="assets/office/mouse.svg" alt="" draggable="false">
+        <!-- nameplate (portrait filler) -->
+        <div class="o-nameplate">RECEPTION</div>
+        <!-- telephone -->
+        <div class="o-phone" id="o-phone">
+          <img class="o-phone-cord" src="assets/office/phone-cord.svg" alt="" draggable="false">
+          <img class="o-phone-body" src="assets/office/phone-body.svg" alt="" draggable="false">
+          <img class="o-phone-body-wide" src="assets/office/phone-body-wide.svg" alt="" draggable="false">   <!-- phone (portrait) -->
+          <div class="o-phone-lcd" id="o-phone-lcd">TINITOMO</div>
+          <div class="o-phone-fn">
+            <button data-fn="hold">HOLD</button><button data-fn="transfer">XFER</button><button data-fn="end">END</button>
+          </div>
+          <div class="o-phone-keys"></div>
+          <img class="o-phone-handset" id="o-handset" src="assets/office/phone-handset.svg" alt="" draggable="false">
+          <div class="o-ring-bubble">RING!</div>
+        </div>
+        <!-- caller speech bubble (js/office.js → renderCall) -->
+        <div class="o-call" id="o-call" data-nodrag></div>
+        <!-- PC app window: Phone Book / Messenger / Memo (js/pc.js) -->
+        <div class="pc-panel" id="pc-panel" data-nodrag>
+          <div class="pc-bar">
+            <div class="pc-tabs">
+              <button data-tab="phonebook">📒 Phone Book</button>
+              <button data-tab="messenger">💬 Messenger</button>
+              <button data-tab="memo">📝 Memo</button>
+            </div>
+            <div class="pc-title">🏪 Sticker Market</div>   <!-- shown for standalone apps -->
+            <button class="pc-close" aria-label="close">✕</button>
+          </div>
+          <div class="pc-body" id="pc-body"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- SCENE 2 : GACHA ---------- -->
+    <section class="scene" id="scene-gacha" data-name="Gacha">
+      <div class="bg bg-gacha"></div>
+      <div class="stage">
+        <div class="gm gm-deco gm-left" aria-hidden="true"><div class="gm-top"><div class="gm-glass"></div></div><div class="gm-body"><div class="gm-knob-deco"></div><div class="gm-hold"></div></div></div>
+        <div class="gm gm-deco gm-right" aria-hidden="true"><div class="gm-top"><div class="gm-glass"></div></div><div class="gm-body"><div class="gm-knob-deco"></div><div class="gm-hold"></div></div></div>
+
+        <div class="gm gm-main" id="gm">
+          <div class="gm-sign">TiniTomo Toys</div>
+          <div class="gm-top">
+            <div class="gm-glass" id="gm-glass"></div>
+            <div class="gm-screen">
+              <div class="gm-screen-title" id="gm-msg">Choose pulls</div>
+              <div class="gm-screen-btns">
+                <button class="gm-pick on" data-n="1">1×<small>1 coin</small></button>
+                <button class="gm-pick" data-n="5">5×<small>5 coins</small></button>
+              </div>
+            </div>
+          </div>
+          <div class="gm-body">
+            <button class="gm-slot" id="gm-slot" data-nodrag><span class="gm-slot-hole"></span><span class="gm-slot-label">COIN</span></button>
+            <div class="gm-knob-wrap" id="gm-knob-wrap" data-nodrag>
+              <img class="gm-knob" id="gm-knob" src="assets/gacha/knob.svg" alt="knob" draggable="false">
+              <div class="gm-rounds" id="gm-rounds"></div>
+            </div>
+            <button class="gm-hold" id="gm-hold" data-nodrag><div class="gm-hold-balls" id="gm-hold-balls"></div><div class="gm-hold-flap"></div></button>
+          </div>
+        </div>
+
+        <!-- blindbox reveal layer (pops in front of the machine) -->
+        <div class="reveal" id="reveal" data-nodrag>
+          <div class="reveal-title" id="reveal-title">Tear the flaps!</div>
+          <div class="reveal-row" id="reveal-row"></div>
+          <button class="btn reveal-tearall" id="reveal-tearall">✂ Tear all</button>
+          <button class="btn reveal-done" id="reveal-done">Collect all ✓</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- SCENE 3 : STICKER BOOK ---------- -->
+    <section class="scene" id="scene-book" data-name="Sticker Book">
+      <div class="bg bg-book"></div>
+      <div class="stage">
+        <div class="b-book" id="b-book" data-nodrag>
+          <div class="b-page" id="b-page">
+            <!-- series background: Space Momo (shown when the full series is on this page) -->
+            <div class="b-theme b-theme-space">
+              <img class="sp-jupiter" src="assets/book/space/jupiter.png" alt="" draggable="false">
+              <img class="sp-mars" src="assets/book/space/mars.png" alt="" draggable="false">
+              <img class="sp-star s1" src="assets/book/space/star.png" alt="" draggable="false">
+              <img class="sp-star s2" src="assets/book/space/star.png" alt="" draggable="false">
+              <img class="sp-star s3" src="assets/book/space/star.png" alt="" draggable="false">
+              <img class="sp-star s4" src="assets/book/space/star.png" alt="" draggable="false">
+              <img class="sp-star s5" src="assets/book/space/star.png" alt="" draggable="false">
+              <img class="sp-star s6" src="assets/book/space/star.png" alt="" draggable="false">
+            </div>
+            <!-- series background: Soso Supermart (shown when the full series is on this page) -->
+            <div class="b-theme b-theme-supermart"></div>
+            <!-- front cover decoration -->
+            <div class="b-cover-label"><small>TiniTomo Toys</small>Sticker Book</div>
+            <div class="b-pageno" id="b-pageno"></div>
+            <div class="b-layer" id="b-layer"></div>   <!-- placed stickers go here -->
+          </div>
+          <div class="b-rings"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="b-nav">
+          <button id="b-prev" aria-label="previous page">◀</button>
+          <span id="b-label">Front cover</span>
+          <button id="b-next" aria-label="next page">▶</button>
+        </div>
+        <div class="b-tray" data-nodrag>
+          <div class="b-tray-title">My Stickers <small id="b-count"></small></div>
+          <div class="b-tray-list" id="b-tray"></div>
+        </div>
+      </div>
+    </section>
+
+
+  </div>
+</div>
+
+<!-- ============================================================
+     3. NAVIGATION (edge arrows + dots)
+     ============================================================ -->
+<button class="nav-arrow left" id="nav-left" aria-label="previous scene"><img src="assets/ui/arrow.svg" alt="" draggable="false"></button>
+<button class="nav-arrow right" id="nav-right" aria-label="next scene"><img src="assets/ui/arrow.svg" alt="" draggable="false"></button>
+<div id="nav-dots"></div>
+
+<!-- ============================================================
+     4. OVERLAYS (modal, toast, floating text)
+     ============================================================ -->
+<div id="modal" class="modal"><div class="modal-card" id="modal-card"></div></div>
+<div id="toast"></div>
+<div id="fx-layer"></div>
+
+<!-- ============================================================
+     5. SCRIPTS (order matters)
+     ============================================================ -->
+<script src="js/config.js"></script>
+<script src="js/save.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/sticker.js"></script>
+<script src="js/scenes.js"></script>
+<script src="js/calls.js"></script>
+<script src="js/market.js"></script>
+<script src="js/pc.js"></script>
+<script src="js/office.js"></script>
+<script src="js/gacha.js"></script>
+<script src="js/book.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
