@@ -779,6 +779,9 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 .b-page.theme-supermart .b-pageno { color: #4a78c2; }
 .b-page.theme-space .b-pageno { color: #c9d6ff; }
 .b-page.theme-space.cover::before { border-color: rgba(201, 214, 255, .5); }
+/* series background: Pudding Momo */
+.b-theme-pudding {background:url("../assets/book/pudding/puddingtower.png") center / contain no-repeat;}
+.b-page.theme-pudding .b-theme-pudding {opacity: 1;}
 .b-theme img { position: absolute; }
 .sp-jupiter { width: 46%; right: -12%; top: -6%; transform: rotate(-12deg); }
 .sp-mars { width: 30%; left: -6%; bottom: 8%; }
