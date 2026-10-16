@@ -164,7 +164,8 @@ const PC = {
     SAVE.data.autoResponse = !SAVE.data.autoResponse; SAVE.save(); this.renderAuto();
     AUDIO.syncRing();
     UI.toast(SAVE.data.autoResponse ? `Auto Reply ON — calls are handled for you (+$${CONFIG.AUTO_REPLY_REWARD} each) 🤖` : 'Auto Reply OFF — handle calls yourself for bigger bonuses');
-    if (SAVE.data.autoResponse && OFFICE.ringing && !OFFICE.isCallback()) OFFICE.autoHandle();
+    if (SAVE.data.autoResponse) OFFICE.autoHandle();
+    else { clearTimeout(OFFICE._autoT); OFFICE._autoT = null; OFFICE._autoDue = 0; }
     OFFICE.renderAlert();
   },
   /* called on start-up and after every gacha pull */
