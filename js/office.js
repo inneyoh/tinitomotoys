@@ -82,18 +82,23 @@ const OFFICE = {
     this.lcd(this.isCallback() ? 'CALL BACK' : 'INCOMING');
     this.renderCall(); PC.refresh(); this.renderAlert();
     // Auto Reply handles normal calls; Soso (special caller) always needs you
-    if (SAVE.data.autoResponse && !this.isCallback() && !CALLS.call.special) {
+    if (SAVE.data.autoResponse && !CALLS.call.special) {
       clearTimeout(this._autoT);
-      this._autoT = setTimeout(() => this.autoHandle(), CONFIG.AUTO_REPLY_DELAY_MS);
+      this._autoDue = Date.now() + CONFIG.AUTO_REPLY_DELAY_MS;
+      const incoming = CALLS.call;
+      this._autoT = setTimeout(() => { if (CALLS.call === incoming) this.autoHandle(); }, CONFIG.AUTO_REPLY_DELAY_MS);
     }
   },
   /* Auto Reply: pick up and handle the call for a smaller fixed bonus */
   autoHandle() {
     if (document.hidden) return;
-    if (!this.ringing || (CALLS.call && CALLS.call.special)) return;
+    const c = CALLS.call;
+    if (!SAVE.data.autoResponse || !c || c.special || c.state === 'done') return;
+    clearTimeout(this._autoT); this._autoT = null; this._autoDue = 0;
+    AUDIO.stopSamples('caller'); AUDIO.stopHold();
     this.ringing = false;
     const phone = document.getElementById('o-phone');
-    phone.classList.remove('ringing'); phone.classList.add('answered');
+    phone.classList.remove('ringing', 'oncall', 'held'); phone.classList.add('answered');
     this.lcd('AUTO REPLY', 1000);
     CALLS.call = null;
     SAVE.data.calls.ok++;
@@ -105,6 +110,7 @@ const OFFICE = {
   },
   pickUp() {
     if (!this.ringing) return this.lcd(CALLS.call ? 'ON LINE' : 'NO CALL', 700);
+    if (SAVE.data.autoResponse && CALLS.call && !CALLS.call.special) return this.autoHandle();
     clearTimeout(this._autoT);
     this.ringing = false;
     const phone = document.getElementById('o-phone');
@@ -112,6 +118,7 @@ const OFFICE = {
     CALLS.pickUp();
     this.lcd('LINE 1');
     this.renderCall(); PC.refresh(); this.renderAlert();
+    AUDIO.play('caller');
   },
   pressHold() {
     AUDIO.play("button");
@@ -185,6 +192,11 @@ const OFFICE = {
   },
   tick() {
     if (document.hidden) return;
+    // Recover after a hidden-tab timer, or Auto Reply enabled during a live call.
+    const autoCall = CALLS.call;
+    if (SAVE.data.autoResponse && autoCall && !autoCall.special && autoCall.state !== 'done') {
+      if (!this.ringing || Date.now() >= (this._autoDue || 0)) return this.autoHandle();
+    }
     if (this.ringing) {
       if (--this.ringLeft <= 0) {
         this.ringing = false;
@@ -230,7 +242,7 @@ const OFFICE = {
   renderAlert() {
     const el = document.getElementById('ring-alert'); if (!el) return;
     const c = CALLS.call;
-    const autoTakes = SAVE.data.autoResponse && c && !c.special && c.state !== 'callback';
+    const autoTakes = SAVE.data.autoResponse && c && !c.special;
     const show = this.ringing && SCENES.index !== 0 && !autoTakes;
     el.classList.toggle('show', show);
     el.querySelector('span').textContent = c && c.special ? 'Soso is calling!' : 'Phone ringing!';
