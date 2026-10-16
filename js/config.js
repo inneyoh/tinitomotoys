@@ -154,6 +154,7 @@ const CONFIG = {
      {id: 'default-rang',    name: "It's Rang",     rarity: 'R', series: null },
      {id: 'default-soso',    name: "It's Soso",     rarity: 'R', series: null },
      {id: 'default-momo',    name: "It's Momo",     rarity: 'R', series: null },
+     {id: 'cafetunes-mo',   name: 'Pudding for Mo',  rarity: 'LR', series: 'cafe' },
   ],
 
   /* ---------- 6. SERIES ----------
