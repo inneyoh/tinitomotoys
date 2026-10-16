@@ -1043,3 +1043,27 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
   body.mobile-chat-open #pc-panel { visibility:hidden;pointer-events:none; }
   /* (compose stays visible even while a transfer is being typed) */
 }
+
+
+/* Caller is speaking: active only while the three-second voice clip plays. */
+body.caller-talking .oc-ava {
+  animation: callerTalk .22s ease-in-out infinite alternate;
+}
+body.caller-talking .oc-line::after,
+body.caller-talking .pc-callnote::after {
+  content: ' \2582\2585\2583';
+  display: inline-block;
+  color: var(--ink);
+  animation: callerTalk .22s ease-in-out infinite alternate;
+}
+@keyframes callerTalk {
+  from { transform: scaleY(.75); opacity: .65; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.caller-talking .oc-ava,
+  body.caller-talking .oc-line::after,
+  body.caller-talking .pc-callnote::after {
+    animation: none;
+  }
+}
