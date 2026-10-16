@@ -13,7 +13,7 @@ const AUDIO = {
     try { const v=JSON.parse(localStorage.getItem(this.key));
       for(const k of ['music','sfx']) if(Number.isInteger(v?.[k]) && v[k]>=0 && v[k]<=5) this.levels[k]=v[k];
     } catch (_) {}
-    for(const [name,file] of Object.entries({typing:'keyboard-typing.mp3',send:'keyboard-enter.mp3'})){
+    for(const [name,file] of Object.entries({typing:'keyboard-typing.mp3',send:'keyboard-enter.mp3',caller:'caller-gibberish.mp3'})){
       this.samples[name]=new Audio('assets/audio/'+file);this.samples[name].preload='auto';
     }
     this.bgm=new Audio('assets/audio/tiny-hustles.mp3');
@@ -23,24 +23,28 @@ const AUDIO = {
     document.addEventListener('pointerdown',unlock,{capture:true});
     document.addEventListener('keydown',unlock,{capture:true});
     document.addEventListener('visibilitychange',()=>{
-      if(document.hidden){this.bgm.pause();this.stopSamples();this.stopRing();if(this.ctx?.state==='running')this.ctx.suspend().catch(()=>{});}
+      if(document.hidden){this.bgm.pause();this.stopSamples();this.stopHold();this.stopRing();if(this.ctx?.state==='running')this.ctx.suspend().catch(()=>{});}
       else if(this.unlocked){this.unlock();this.syncRing();}
     });
-    window.addEventListener('pagehide',()=>{this.bgm.pause();this.stopSamples();this.stopRing();});
+    window.addEventListener('pagehide',()=>{this.bgm.pause();this.stopSamples();this.stopHold();this.stopRing();});
     window.addEventListener('pageshow',()=>{if(this.unlocked){this.unlock();this.syncRing();}});
     // Observe actual ring state, including missed calls, auto reply and callbacks.
     const phone=document.getElementById('o-phone');
-    if(phone)new MutationObserver(()=>this.syncRing()).observe(phone,{attributes:true,attributeFilter:['class']});
+    if(phone)new MutationObserver(()=>{
+      this.syncRing(); this.syncHold();
+      if(CALLS.call?.state !== 'live') this.stopSamples('caller');
+    }).observe(phone,{attributes:true,attributeFilter:['class']});
     document.addEventListener('click',e=>{if(e.target.closest('.pc-chip'))this.play('typing');});
   },
   unlock() {
     if(document.hidden)return;
     try {
       if(!this.ctx){const C=window.AudioContext||window.webkitAudioContext;if(C){this.ctx=new C();this.bus=this.ctx.createGain();this.bus.connect(this.ctx.destination);this.applyVolumes();}}
-      if(this.ctx?.state==='suspended')this.ctx.resume().catch(()=>{});
+      if(this.ctx?.state==='suspended')this.ctx.resume().then(()=>this.syncHold()).catch(()=>{});
       this.unlocked=true;
       if(this.levels.music && this.bgm.paused)this.bgm.play().catch(()=>{});
       this.syncRing();
+      this.syncHold();
     } catch (_) {} // Audio failure must never interrupt gameplay.
   },
   applyVolumes(){
@@ -48,6 +52,8 @@ const AUDIO = {
     for(const voice of this.voices)voice.volume=this.levels.sfx/5*this.SETTINGS.sfxGain;
     if(!this.levels.sfx)this.stopSamples();
     if(this.bus)this.bus.gain.value=this.levels.sfx/5*this.SETTINGS.sfxGain*this.SETTINGS.embeddedSfxBoost;
+    if(this.holdGain && this.ctx)this.holdGain.gain.setTargetAtTime(this.levels.sfx/5*0.008,this.ctx.currentTime,0.03);
+    if(!this.levels.sfx)this.stopHold();
   },
   setVolume(kind,value){
     if(!['music','sfx'].includes(kind))return;
@@ -73,19 +79,45 @@ const AUDIO = {
   },
   stopRing(){clearInterval(this.ringTimer);this.ringTimer=null;(this.ringNodes||[]).forEach(n=>{try{n.stop();}catch(_){}});this.ringNodes=[];},
   sample(name){
+    if(name==='caller')this.stopSamples('caller');
     const source=this.samples[name];if(!source)return;
     // Limit overlapping keys without delaying rapid composing taps.
     if(this.voices.size>=6){const old=this.voices.values().next().value;old.pause();this.voices.delete(old);}
     const voice=source.cloneNode();voice.soundName=name;voice.volume=this.levels.sfx/5*this.SETTINGS.sfxGain;
     this.voices.add(voice);
-    const clean=()=>this.voices.delete(voice);voice.onended=clean;voice.onerror=clean;
+    const clean=()=>{
+      clearTimeout(voice.stopTimer);this.voices.delete(voice);
+      if(name==='caller')document.body.classList.remove('caller-talking');
+    };voice.onended=clean;voice.onerror=clean;
+    if(name==='caller') {
+      document.body.classList.add('caller-talking');
+      voice.stopTimer=setTimeout(()=>{voice.pause();clean();},3000);
+    }
     voice.play().catch(clean);
   },
   stopSamples(name=null){
     for(const voice of [...this.voices]){
       if(name && voice.soundName!==name)continue;
+      clearTimeout(voice.stopTimer);
+      if(voice.soundName==='caller')document.body.classList.remove('caller-talking');
       voice.pause();voice.currentTime=0;this.voices.delete(voice);
     }
+  },
+  /* Very quiet continuous hold beep; intentionally bypasses embeddedSfxBoost. */
+  syncHold(){
+    const c=CALLS.call,held=c && (c.state==='hold' || (c.state==='xfer' && c.prevState==='hold'));
+    if(!held || document.hidden || !this.unlocked || !this.levels?.sfx || this.ctx?.state!=='running'){this.stopHold();return;}
+    if(this.holdOsc)return;
+    const t=this.ctx.currentTime,o=this.ctx.createOscillator(),g=this.ctx.createGain();
+    o.type='sine';o.frequency.value=440;g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(this.levels.sfx/5*0.008,t+0.2);
+    o.connect(g);g.connect(this.ctx.destination);o.start();this.holdOsc=o;this.holdGain=g;
+  },
+  stopHold(){
+    if(!this.holdOsc)return;
+    const o=this.holdOsc,g=this.holdGain,t=this.ctx.currentTime;
+    g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+0.04);
+    o.stop(t+0.05);o.onended=()=>{o.disconnect();g.disconnect();};this.holdOsc=null;this.holdGain=null;
   },
   /* Low-level voices: short gain ramps prevent clicks at start/end. */
   tone(freq,duration=.1,volume=.12,type='sine',delay=0,endFreq=null){
@@ -113,7 +145,7 @@ const AUDIO = {
     try{
       const tone=(...a)=>this.tone(...a),noise=(...a)=>this.noise(...a);
       if(name==='ring'){[0,.18,.48,.66].forEach(d=>{tone(660,.13,.10,'sine',d);tone(880,.13,.055,'sine',d);});}
-      if(name==='typing' || name==='send'){this.sample(name);return;}
+      if(name==='typing' || name==='send' || name==='caller'){this.sample(name);return;}
       if(name==='coin'){tone(1500,.16,.12,'sine');tone(2200,.22,.07,'sine',.045);noise(.08,.10,2300,.08);tone(650,.10,.07,'triangle',.14,350);}
       if(name==='dial'){
         const keys=['1','2','3','4','5','6','7','8','9','*','0','#'],i=keys.indexOf(String(arg));
