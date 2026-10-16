@@ -8,7 +8,7 @@ const CONFIG = {
   START_MONEY: 50,            // money given to a brand-new save (for testing)
 
   /* ---------- 2. OFFICE ---------- */
-  RING_MIN_MS: 4000,          // shortest wait before the next call rings
+  RING_MIN_MS: 3000,          // shortest wait before the next call rings
   RING_MAX_MS: 9000,          // longest wait
   RING_TIMEOUT_S: 15,         // ring this long without pick-up = missed call
   AUTO_REPLY_DELAY_MS: 900,   // how fast Auto Reply picks up a ringing phone
