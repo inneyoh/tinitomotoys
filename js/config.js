@@ -147,6 +147,7 @@ const CONFIG = {
     { id: 'shutter-soso',    name: 'Closing Time with Soso',    rarity: 'SR', series: 'supermart', standsInFor: 'supermart-soso' },
     { id: 'running-momo',    name: 'Pudding Ahead',    rarity: 'SR', series: 'pudding' },
     { id: 'sandwich-kew',    name: 'Picnic with Kew',    rarity: 'SR', series: 'picnic' },
+     { id: 'lemon-rang',    name: 'Picnic with Rang',    rarity: 'SR', series: 'picnic' },
     { id: 'default-kew',     name: "It's Kew",     rarity: 'R', series: null },
     { id: 'cafetunes-kew',   name: 'Espresso Time with Kew',  rarity: 'LR', series: 'cafe' },
      {id: 'popo-pudding',    name: "Popo's Pudding", rarity: 'N', series: 'pudding'},
