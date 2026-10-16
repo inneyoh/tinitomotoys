@@ -16,6 +16,7 @@
      js/office.js        → Scene 1: office desk + telephone controls
      js/gacha.js         → Scene 2: gacha machine + blindboxes
      js/book.js          → Scene 3: sticker book
+     js/offline.js       → Auto Reply earnings while the game is closed
      js/main.js          → boots everything
      assets/             → all images (stickers, office, gacha, book, ui, icon)
      manifest.webmanifest → app name + icons for "Add to Home Screen"
@@ -209,6 +210,8 @@
 <button class="nav-arrow left" id="nav-left" aria-label="previous scene"><img src="assets/ui/arrow.svg" alt="" draggable="false"></button>
 <button class="nav-arrow right" id="nav-right" aria-label="next scene"><img src="assets/ui/arrow.svg" alt="" draggable="false"></button>
 <div id="nav-dots"></div>
+<!-- ringing alert: shows on other screens while the office phone rings (js/office.js) -->
+<button id="ring-alert" aria-label="go to the office phone">📞 <span>Phone ringing!</span></button>
 
 <!-- ============================================================
      4. OVERLAYS (modal, toast, floating text)
@@ -231,6 +234,8 @@
 <script src="js/office.js"></script>
 <script src="js/gacha.js"></script>
 <script src="js/book.js"></script>
+<script src="js/offline.js"></script>
+<script src="js/audio.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
