@@ -49,10 +49,11 @@ const AUDIO = {
   },
   applyVolumes(){
     if(this.bgm){this.bgm.volume=this.levels.music/5*this.SETTINGS.musicGain;if(!this.levels.music)this.bgm.pause();}
-    for(const voice of this.voices)voice.volume=this.levels.sfx/5*this.SETTINGS.sfxGain;
+    for (const voice of this.voices) {voice.volume = Math.min(1,this.levels.sfx / 5 * this.SETTINGS.sfxGain *(voice.soundName === 'caller' ? 3 : 1));
+  }
     if(!this.levels.sfx)this.stopSamples();
     if(this.bus)this.bus.gain.value=this.levels.sfx/5*this.SETTINGS.sfxGain*this.SETTINGS.embeddedSfxBoost;
-    if(this.holdGain && this.ctx)this.holdGain.gain.setTargetAtTime(this.levels.sfx/5*0.008,this.ctx.currentTime,0.03);
+    if(this.holdGain && this.ctx)this.holdGain.gain.setTargetAtTime(this.levels.sfx/5*0.032,this.ctx.currentTime,0.03);
     if(!this.levels.sfx)this.stopHold();
   },
   setVolume(kind,value){
@@ -83,7 +84,7 @@ const AUDIO = {
     const source=this.samples[name];if(!source)return;
     // Limit overlapping keys without delaying rapid composing taps.
     if(this.voices.size>=6){const old=this.voices.values().next().value;old.pause();this.voices.delete(old);}
-    const voice=source.cloneNode();voice.soundName=name;voice.volume=this.levels.sfx/5*this.SETTINGS.sfxGain;
+    const voice=source.cloneNode();voice.soundName=name;voice.volume = Math.min(1,this.levels.sfx / 5 * this.SETTINGS.sfxGain *(name === 'caller' ? 3 : 1));
     this.voices.add(voice);
     const clean=()=>{
       clearTimeout(voice.stopTimer);this.voices.delete(voice);
@@ -110,7 +111,7 @@ const AUDIO = {
     if(this.holdOsc)return;
     const t=this.ctx.currentTime,o=this.ctx.createOscillator(),g=this.ctx.createGain();
     o.type='sine';o.frequency.value=440;g.gain.setValueAtTime(0,t);
-    g.gain.linearRampToValueAtTime(this.levels.sfx/5*0.008,t+0.2);
+    g.gain.linearRampToValueAtTime(this.levels.sfx/5*0.032,t+0.2);
     o.connect(g);g.connect(this.ctx.destination);o.start();this.holdOsc=o;this.holdGain=g;
   },
   stopHold(){
