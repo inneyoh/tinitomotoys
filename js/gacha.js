@@ -23,6 +23,14 @@ const GACHA = {
     this.restorePending();
     document.getElementById('reveal-tearall').onclick = () => this.tearAll();
     this.bindKnob();
+    SCENES.onChange.push(scene => {
+      if (scene !== 'gacha') {
+        if (this._spinning) this.setTurn(this.pulls * 360);
+        this.stopSpin();
+      } else if (this.state === 'paid' && this.turned < this.pulls * 360) {
+        document.getElementById('gm').classList.add('knob-ready');
+      }
+    });
     this.setMsg('Choose pulls');
   },
 
@@ -80,6 +88,7 @@ const GACHA = {
       }, i * 140);
     }
     setTimeout(() => {
+      if (this.state !== 'paid' || this.turned > 0) return;
       document.getElementById('gm').classList.add('knob-ready');
       this.setMsg(`Turn the knob ×${n}`);
       this.updateRounds();
@@ -126,6 +135,7 @@ const GACHA = {
     wrap.addEventListener('pointercancel', up);
   },
   setTurn(deg) {
+    document.getElementById('gm').classList.remove('knob-ready');
     const max = this.pulls * 360;
     deg = Math.min(Math.max(deg, this.turned), max);   // the knob only ever turns forward
     if (deg > this.turned) AUDIO.play("knob");
@@ -138,7 +148,7 @@ const GACHA = {
     const due = Math.min(this.pulls, Math.floor(deg / 360));
     while (this.dropped < due) this.dropBall();
     this.updateRounds();
-    if (deg >= max) this.state = 'spinning';   // knob locks once all rounds are turned
+    if (deg >= max && this.state !== 'reveal') this.state = 'spinning';
   },
   autoSpin() {
     if (this._spinning) return;   // ignore double taps
@@ -149,13 +159,14 @@ const GACHA = {
     const t0 = performance.now();
     const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
     const step = now => {
+      if (!this._spinning) return;
       const t = Math.min(1, (now - t0) / dur);
       // ease each full round separately so every turn feels like a "clunk"
       const rounds = (end - start) / 360, p = t * rounds, k = Math.floor(p), f = p - k;
       this.setTurn(t >= 1 ? end : start + (k + ease(f)) * 360);
-      if (t < 1) requestAnimationFrame(step); else this._spinning = false;
+      if (t < 1) this._spinRAF = requestAnimationFrame(step); else this._spinning = false;
     };
-    requestAnimationFrame(step);
+    this._spinRAF = requestAnimationFrame(step);
   },
   updateRounds() {
     const done = Math.min(this.pulls, Math.floor(this.turned / 360));
@@ -200,6 +211,7 @@ const GACHA = {
     if (this.state !== 'loaded' && !document.querySelector('#gm-hold-balls .gm-ball')) return;
     if (this.state === 'reveal') return;
     this.state = 'reveal';
+    this.stopSpin();
     const gm = document.getElementById('gm');
     gm.classList.remove('hold-ready');
     document.querySelectorAll('.gm-ball').forEach(b => b.classList.add('pop'));
@@ -268,6 +280,8 @@ const GACHA = {
     // Visible results are authoritative, even if an older animation changed state.
     if (!document.getElementById('reveal').classList.contains('open')) return;
     document.getElementById('reveal').classList.remove('open', 'all-open', 'multi');
+    this.stopSpin();
+    document.getElementById('gm').classList.remove('knob-ready', 'hold-ready');
     SAVE.data.gachaPending = null; SAVE.save();
     PC.renderMarketIcon();
     this.state = 'select'; this.turned = 0; this.dropped = 0;
@@ -275,5 +289,12 @@ const GACHA = {
     document.getElementById('gm-rounds').innerHTML = '';
     this.setMsg(`Insert ${this.pulls} coin${this.pulls > 1 ? 's' : ''}`);
     BOOK.renderTray();
+  },
+  stopSpin() {
+    this._spinning = false;
+    cancelAnimationFrame(this._spinRAF);
+    clearTimeout(this._jT);
+    document.getElementById('gm-glass').classList.remove('jiggle');
+    document.getElementById('gm').classList.remove('knob-ready');
   },
 };
