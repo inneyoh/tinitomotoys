@@ -4,7 +4,7 @@
    Edit SETTINGS for defaults, and the named effects in play().
    ================================================================ */
 const AUDIO = {
-  SETTINGS: { music: 2, sfx: 3, musicGain: 0.55, sfxGain: 0.65 },
+  SETTINGS: { music: 2, sfx: 3, musicGain: 0.3, sfxGain: 0.55 },
   samples: {}, voices: new Set(),
   key: 'tinitomo-audio-v1', ctx: null, bgm: null, bus: null,
   levels: null, unlocked: false, last: {}, ringTimer: null,
