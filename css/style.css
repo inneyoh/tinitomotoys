@@ -194,13 +194,14 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
    --ph = phone height                                                    */
 @media (orientation: portrait) {
   /* --pb keeps the phone clear of the scene dots (+ iPhone home bar) */
-  #scene-office .stage { --t: 58px; --pb: calc(max(10px, env(safe-area-inset-bottom)) + 46px); --ph: 66.6cqw; }
-  .o-monitor   { left: 3cqw; top: var(--t); bottom: auto; width: 58cqw; }
-  .o-riser     { left: 3cqw; top: calc(var(--t) + 43.8cqw); width: 94cqw; }
-  .o-frame     { left: 72cqw; top: calc(var(--t) + 1cqw); bottom: auto; width: 19cqw; }
-  .o-plant     { left: 73.5cqw; top: calc(var(--t) + 18cqw); bottom: auto; width: 17cqw; }
+  /* --mt = top of the big monitor (just under the music button / money row) */
+  #scene-office .stage { --t: 58px; --mt: 52px; --pb: calc(max(10px, env(safe-area-inset-bottom)) + 46px); --ph: 66.6cqw; }
+  .o-monitor   { left: 1.3cqw; top: var(--mt); bottom: auto; width: 69cqw; }            /* big monitor, top left */
+  .o-riser     { left: 1.3cqw; top: calc(var(--mt) + 50.4cqw); width: 92.7cqw; }       /* shelf right under it */
+  .o-frame     { left: 73.9cqw; top: calc(var(--mt) + 26.9cqw); bottom: auto; width: 18.2cqw; }   /* photo frame standing on the shelf */
   .o-phone     { left: 3cqw; top: auto; bottom: var(--pb); width: 94cqw; }
   .o-keyboard, .o-mouse, .o-nameplate { display: none; }
+  #scene-office .o-plant { display: none; }   /* no room next to the big monitor on phones */
 }
 /* shorter phones (e.g. Safari with toolbars, iPhone SE): slightly smaller phone */
 @media (orientation: portrait) and (min-aspect-ratio: 50/100) {
@@ -384,7 +385,7 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
   /* bubble sits right above the phone, sized to its text; on short screens it
      covers the shelf during a call (the shelf isn't needed while talking) */
   .o-call   { left: 3cqw; width: 94cqw; top: auto; bottom: calc(var(--pb) + var(--ph) + 1.5cqw);
-              max-height: calc(100% - var(--pb) - var(--ph) - 1.5cqw - var(--t) - 46cqw); }
+              max-height: max(120px, calc(100% - var(--pb) - var(--ph) - 1.5cqw - var(--mt) - 66cqw)); }
   .pc-panel { left: 2cqw; width: 96cqw; top: var(--t); height: auto; bottom: calc(var(--pb) + var(--ph) + 1.5cqw); }
 }
 
@@ -1011,7 +1012,8 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
   #pc-body.pc-messenger .pc-staff { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;overflow:auto; }
   #pc-body.pc-messenger .pc-person { min-height:72px;padding:8px; }
   #mobile-chat.open { display:flex;flex-direction:column;position:fixed;z-index:60;
-    inset:max(54px, env(safe-area-inset-top)) 8px max(12px, env(safe-area-inset-bottom));
+    top:max(54px, env(safe-area-inset-top)); left:8px; right:8px; bottom:auto;
+    max-height:calc(100% - max(54px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom)));   /* ends right after Send */
     background:#fdfbff;border:3px solid #565068;border-radius:16px;overflow:hidden;color:var(--ink); }
   .mobile-chat-bar { display:flex;align-items:center;justify-content:space-between;padding:8px;gap:8px;background:#e7defa;border-bottom:2px solid #565068;flex-shrink:0; }
   .mobile-chat-bar button { min-width:44px;min-height:36px;border:2px solid var(--ink);border-radius:12px;background:#fff4dd;padding:4px 10px;font-weight:800; }
@@ -1020,14 +1022,15 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
   #mobile-chat-body .pc-chat-head { order:-2;flex-shrink:0;padding:8px; }
   #mobile-chat-body .pc-chat-head b { font-size:17px; }
   #mobile-chat-body .pc-callnote { order:-1;font-size:12px;max-height:75px;overflow:auto; }
-  #mobile-chat-body .pc-log { flex:1 1 120px;min-height:65px;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:5px 8px; }
+  #mobile-chat-body .pc-log { flex:0 1 auto;height:34vh;min-height:48px;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:5px 8px; }
   #mobile-chat-body .pc-msg { flex-shrink:0; }
-  #mobile-chat-body .pc-compose { flex-shrink:1;max-height:48%;overflow-y:auto;touch-action:pan-y;padding-top:8px;gap:8px; }
+  #mobile-chat-body .pc-compose { flex-shrink:0;overflow-y:auto;touch-action:pan-y;padding-top:8px;gap:8px; }
   #mobile-chat-body .pc-row { flex-wrap:wrap;gap:5px; }
   #mobile-chat-body .pc-row label { width:100%;font-size:10px; }
   #mobile-chat-body .pc-chip { font-size:12px;min-height:34px;white-space:normal;text-align:left;padding:5px 9px;max-width:100%; }
   #mobile-chat-body .pc-send { position:static;margin:4px 0 0;align-self:stretch;min-height:40px;flex-shrink:0; }
-  .mobile-phone { flex-shrink:0;padding:8px;background:#e7defa;border-top:2px solid #565068; }
+  .mobile-phone { display:none !important; }   /* phone controls removed from the chat — use the desk phone */
+  .mobile-phone-x { flex-shrink:0;padding:8px;background:#e7defa;border-top:2px solid #565068; }
   #mobile-phone-lcd { text-align:center;background:#c5e9b4;border:2px solid var(--ink);border-radius:8px;font:bold 15px monospace;padding:5px; }
   .mobile-phone-actions { display:flex;gap:8px;margin-top:7px; }
   .mobile-phone button { min-height:40px;border:2px solid var(--ink);border-radius:10px;font-weight:800;background:#fff4dd; }
@@ -1038,5 +1041,5 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
   #mobile-dial.open { display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:7px; }
   body.mobile-chat-open #nav-left,body.mobile-chat-open #nav-right,body.mobile-chat-open #nav-dots,
   body.mobile-chat-open #pc-panel { visibility:hidden;pointer-events:none; }
-  #mobile-chat.open:has(#mobile-dial.open) .pc-compose { display:none; }
+  /* (compose stays visible even while a transfer is being typed) */
 }
