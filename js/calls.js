@@ -77,16 +77,17 @@ const CALLS = {
   /* ---------- 3. PHONE ACTIONS (called by OFFICE) ---------- */
   pickUp() {
     const c = this.call; if (!c) return;
-    if (c.state === 'callback' && c.special) c.note = '(she sounds annoyed — she still wants Momo)';
-    if (c.state === 'callback') c.line = c.special ? 'Soso!! SOSO SOSO!'
+    if (c.state === 'callback' && c.special) c.note = '(she sounds annoyed, best to call Momo...)';
+    if (c.state === 'callback') c.line = c.special ? 'Soso!! SOSOSO!'
       : `Hello? I was sent to the wrong line… I'm still trying to reach <b>${c.keyword}</b>.`;
     c.state = 'live';
   },
   toggleHold() {
     const c = this.call; if (!c || !['live', 'hold'].includes(c.state)) return null;
     c.state = c.state === 'hold' ? 'live' : 'hold';
-    if (c.state === 'live') c.line = 'Hello? Are you still there?';
-    return c.state;
+    if (c.state === 'live') {
+  c.line = c.special ? 'Soso?' : 'Hello? Are you still there?';
+}
   },
   /* XFER pressed: 1st press starts typing, 2nd press sends */
   transferPress() {
