@@ -17,7 +17,7 @@ const CONFIG = {
   /* ---------- 2b. CALL GAMEPLAY ---------- */
   CALL_REWARD: 10,             // $ for a call handled correctly (performance bonus)
   MISTAKE_PENALTY: 3,         // $ taken off that call's reward per mistake
-  AUTO_REPLY_REWARD: 2,       // $ per call when Auto Reply handles it for you
+  AUTO_REPLY_REWARD: 3,       // $ per call when Auto Reply handles it for you
   AUTO_REPLY_UNLOCK_PULLS: 30,
   /* Auto Reply while the game is closed (js/offline.js):
      1 call every 28 min × $3, up to 14 hours away = max $90 */
