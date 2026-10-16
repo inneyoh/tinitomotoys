@@ -15,7 +15,7 @@ const CONFIG = {
   TOP_LOADER_SLOTS: 3,        // top loaders standing in the shelf under the PC
 
   /* ---------- 2b. CALL GAMEPLAY ---------- */
-  CALL_REWARD: 8,             // $ for a call handled correctly (performance bonus)
+  CALL_REWARD: 10,             // $ for a call handled correctly (performance bonus)
   MISTAKE_PENALTY: 3,         // $ taken off that call's reward per mistake
   AUTO_REPLY_REWARD: 2,       // $ per call when Auto Reply handles it for you
   AUTO_REPLY_UNLOCK_PULLS: 30,
@@ -138,17 +138,17 @@ const CONFIG = {
      series: null = not part of a series
      standsInFor: this sticker can replace that one to complete its series page   */
   STICKERS: [
-    { id: 'space-momo',      name: 'Space Momo',      rarity: 'SR', series: 'space' },
-    { id: 'supermart-soso',  name: 'Supermart Soso',  rarity: 'SR', series: 'supermart' },
+    { id: 'space-momo',      name: 'Dr. Mo Space Fit',      rarity: 'SR', series: 'space' },
+    { id: 'supermart-soso',  name: 'Strawberry Rest Time Soso',  rarity: 'SR', series: 'supermart' },
     { id: 'strawberry-milk', name: 'Strawberry Milk', rarity: 'R',  series: 'supermart' },
-    { id: 'space-food',      name: 'Space Food',      rarity: 'R',  series: 'space' },
+    { id: 'space-food',      name: 'Space Sustenance',      rarity: 'R',  series: 'space' },
     { id: 'potato-chips',    name: 'Potato Chips',    rarity: 'N',  series: 'supermart' },
     { id: 'pluto-monster',   name: 'Pluto Monster',   rarity: 'N',  series: 'space' },
-    { id: 'shutter-soso',    name: 'Shutter Soso',    rarity: 'SR', series: 'supermart', standsInFor: 'supermart-soso' },
-    { id: 'running-momo',    name: 'Running Momo',    rarity: 'SR', series: 'pudding' },
-    { id: 'sandwich-kew',    name: 'Sandwich Kew',    rarity: 'SR', series: 'picnic' },
-    { id: 'default-kew',     name: 'Default Kew',     rarity: 'SR', series: null },
-    { id: 'cafetunes-kew',   name: 'Cafe Tunes Kew',  rarity: 'LR', series: 'cafe' },
+    { id: 'shutter-soso',    name: 'Closing Time with Soso',    rarity: 'SR', series: 'supermart', standsInFor: 'supermart-soso' },
+    { id: 'running-momo',    name: 'Pudding Ahead',    rarity: 'SR', series: 'pudding' },
+    { id: 'sandwich-kew',    name: 'Picnic with Kew',    rarity: 'SR', series: 'picnic' },
+    { id: 'default-kew',     name: 'It's Kew',     rarity: 'SR', series: null },
+    { id: 'cafetunes-kew',   name: 'Espresso Time with Kew',  rarity: 'LR', series: 'cafe' },
   ],
 
   /* ---------- 6. SERIES ----------
@@ -158,8 +158,8 @@ const CONFIG = {
     space:     { name: 'Space Momo series', theme: true },
     supermart: { name: 'Soso Supermart series', theme: true },
     pudding:   { name: 'Pudding Momo series', theme: false },   // no background art yet
-    picnic:    { name: 'Mini Picnic series', theme: false },
-    cafe:      { name: 'Cafe Tunes series', theme: false },
+    picnic:    { name: 'Mini Picnic series', theme: false },    // no background art yet
+    cafe:      { name: 'Cafe Tunes series', theme: false },    // no background art yet
   },
 
   /* ---------- 7. STICKER BOOK ---------- */
@@ -174,7 +174,7 @@ const CONFIG = {
   SWIPE_FLICK_SPEED: 0.45,    // or flick faster than this (px per ms)
 
   /* ---------- 9. DEBUG ----------
-     PC: Alt+M = +$30,  Alt+R = reset save
+     PC: Alt+M = +$30,  Alt+R = reset save, Alt+S = Soso Call
      Phone: hold the money pill for 2s = +$30                                        */
   DEBUG: true,
 };
