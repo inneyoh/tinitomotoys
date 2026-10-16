@@ -11,6 +11,7 @@
   BOOK.init();
   SCENES.init(SAVE.data.lastScene || 0);
   OFFLINE.init();   // Auto Reply pay for time spent away
+  if (TUTORIAL.shouldAutoStart()) setTimeout(() => TUTORIAL.start(), 400);   // first play only
 
   // stop iOS long-press menus / double-tap zoom inside the game
   document.addEventListener('contextmenu', e => e.preventDefault());
@@ -35,6 +36,7 @@
       UI.toast('DEBUG: Soso is calling!');
       return;
     }
+   if (e.code === 'KeyT') { e.preventDefault(); TUTORIAL.start(); }
     if (e.code === 'KeyM') { SAVE.earn(30); UI.toast("DEBUG +$30"); }
     if (e.code === 'KeyR' && confirm('Reset all saved data?')) SAVE.reset();
   });
