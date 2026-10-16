@@ -40,6 +40,14 @@ const CALLS = {
   /* ---------- 2. NEW CALL ---------- */
   newCall(forceSpecial = false) {
     this.rollStatuses();
+   // tutorial: a fixed, easy first call (target always Available)
+    if (this.scripted) {
+      const T = this.scripted; this.scripted = null;
+      this.statuses[T.target] = 'available';
+      const caller = CONFIG.CALLERS[0];
+      return this.call = this.blankCall({ caller, keyword: T.keyword, target: T.target,
+        line: `Hello, this is ${caller.name} from ${caller.org}. I'm calling about <b>${T.keyword}</b>.` });
+    }
     const SP = CONFIG.SPECIAL_CALLER;
     if (SP && (forceSpecial || Math.random() < SP.chance)) return this.call = this.blankCall({
       caller: SP.caller, keyword: SP.keyword, target: SP.target, special: true,
