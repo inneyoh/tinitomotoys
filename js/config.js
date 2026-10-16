@@ -152,6 +152,8 @@ const CONFIG = {
      {id: 'popo-pudding',    name: "Popo's Pudding", rarity: 'N', series: 'pudding'},
      {id: 'normal-pudding',  name: "Custard Pudding", rarity: 'R', series: 'pudding'},
      {id: 'default-rang',    name: "It's Rang",     rarity: 'R', series: null },
+     {id: 'default-soso',    name: "It's Soso",     rarity: 'R', series: null },
+     {id: 'default-momo',    name: "It's Momo",     rarity: 'R', series: null },
   ],
 
   /* ---------- 6. SERIES ----------
