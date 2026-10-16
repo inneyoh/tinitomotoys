@@ -66,6 +66,7 @@ const OFFICE = {
 
   /* ring → new call (or the same caller calling back after a bad transfer) */
   scheduleRing() {
+   if (typeof TUTORIAL !== 'undefined' && TUTORIAL.active) return;   // the tutorial rings its own call
     const wait = CONFIG.RING_MIN_MS + Math.random() * (CONFIG.RING_MAX_MS - CONFIG.RING_MIN_MS);
     clearTimeout(this._ringT);
     this._ringT = setTimeout(() => { this._ringT = null; this.ring(); }, wait);
