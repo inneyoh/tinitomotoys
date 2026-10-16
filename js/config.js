@@ -147,8 +147,10 @@ const CONFIG = {
     { id: 'shutter-soso',    name: 'Closing Time with Soso',    rarity: 'SR', series: 'supermart', standsInFor: 'supermart-soso' },
     { id: 'running-momo',    name: 'Pudding Ahead',    rarity: 'SR', series: 'pudding' },
     { id: 'sandwich-kew',    name: 'Picnic with Kew',    rarity: 'SR', series: 'picnic' },
-    { id: 'default-kew',     name: "It's Kew",     rarity: 'SR', series: null },
+    { id: 'default-kew',     name: "It's Kew",     rarity: 'R', series: null },
     { id: 'cafetunes-kew',   name: 'Espresso Time with Kew',  rarity: 'LR', series: 'cafe' },
+     {id: 'popo-pudding', name: 'Popo's Pudding", rarity: 'N', series: 'pudding'},
+     {id: 'normal-pudding', name: "Custard Pudding", rarity" 'R', series: 'pudding'},
   ],
 
   /* ---------- 6. SERIES ----------
@@ -157,7 +159,7 @@ const CONFIG = {
   SERIES: {
     space:     { name: 'Space Momo series', theme: true },
     supermart: { name: 'Soso Supermart series', theme: true },
-    pudding:   { name: 'Pudding Momo series', theme: false },   // no background art yet
+    pudding:   { name: 'Pudding Momo series', theme: true },
     picnic:    { name: 'Mini Picnic series', theme: false },    // no background art yet
     cafe:      { name: 'Cafe Tunes series', theme: false },    // no background art yet
   },
