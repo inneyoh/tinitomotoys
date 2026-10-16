@@ -4,7 +4,7 @@
    Edit SETTINGS for defaults, and the named effects in play().
    ================================================================ */
 const AUDIO = {
-  SETTINGS: { music: 2, sfx: 3, musicGain: 0.3, sfxGain: 0.55 },
+  SETTINGS: { music: 2, sfx: 3, musicGain: 0.25, sfxGain: 0.53, embeddedSfxBoost: 3 },
   samples: {}, voices: new Set(),
   key: 'tinitomo-audio-v1', ctx: null, bgm: null, bus: null,
   levels: null, unlocked: false, last: {}, ringTimer: null,
@@ -47,7 +47,7 @@ const AUDIO = {
     if(this.bgm){this.bgm.volume=this.levels.music/5*this.SETTINGS.musicGain;if(!this.levels.music)this.bgm.pause();}
     for(const voice of this.voices)voice.volume=this.levels.sfx/5*this.SETTINGS.sfxGain;
     if(!this.levels.sfx)this.stopSamples();
-    if(this.bus)this.bus.gain.value=this.levels.sfx/5*this.SETTINGS.sfxGain;
+    if(this.bus)this.bus.gain.value=this.levels.sfx/5*this.SETTINGS.sfxGain*this.SETTINGS.embeddedSfxBoost;
   },
   setVolume(kind,value){
     if(!['music','sfx'].includes(kind))return;
