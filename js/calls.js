@@ -83,11 +83,13 @@ const CALLS = {
     c.state = 'live';
   },
   toggleHold() {
-    const c = this.call; if (!c || !['live', 'hold'].includes(c.state)) return null;
+    const c = this.call; if (!c) return null;
+    // HOLD while typing a transfer cancels the transfer and goes back to the call
+    if (c.state === 'xfer') { c.state = c.prevState || 'hold'; c.xferDigits = ''; }
+    if (!['live', 'hold'].includes(c.state)) return null;
     c.state = c.state === 'hold' ? 'live' : 'hold';
-    if (c.state === 'live') {
-  c.line = c.special ? 'Soso?' : 'Hello? Are you still there?';
-}
+    if (c.state === 'live') c.line = c.special ? 'Soso?' : 'Hello? Are you still there?';
+    return c.state;   // OFFICE.pressHold needs this to update the phone + bubble
   },
   /* XFER pressed: 1st press starts typing, 2nd press sends */
   transferPress() {
