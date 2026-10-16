@@ -22,7 +22,7 @@ const CONFIG = {
   /* Auto Reply while the game is closed (js/offline.js):
      1 call every 28 min × $3, up to 14 hours away = max $90 */
   OFFLINE: {
-    CALL_EVERY_MIN: 28,       // one auto-answered call per this many minutes away
+    CALL_EVERY_MIN: 15,       // one auto-answered call per this many minutes away
     REWARD: 3,                // $ per offline call
     MAX_HOURS: 14,            // time away that still counts
     MIN_AWAY_S: 60,           // shorter breaks don't count
