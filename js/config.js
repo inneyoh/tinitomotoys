@@ -149,8 +149,8 @@ const CONFIG = {
     { id: 'sandwich-kew',    name: 'Picnic with Kew',    rarity: 'SR', series: 'picnic' },
     { id: 'default-kew',     name: "It's Kew",     rarity: 'R', series: null },
     { id: 'cafetunes-kew',   name: 'Espresso Time with Kew',  rarity: 'LR', series: 'cafe' },
-     {id: 'popo-pudding', name: 'Popo's Pudding", rarity: 'N', series: 'pudding'},
-     {id: 'normal-pudding', name: "Custard Pudding", rarity" 'R', series: 'pudding'},
+     {id: 'popo-pudding', name: "Popo's Pudding", rarity: 'N', series: 'pudding'},
+     {id: 'normal-pudding', name: "Custard Pudding", rarity: 'R', series: 'pudding'},
   ],
 
   /* ---------- 6. SERIES ----------
