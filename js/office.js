@@ -72,6 +72,7 @@ const OFFICE = {
   },
   callActive() { const c = CALLS.call; return !!c && c.state !== 'done'; },
   ring(forceSpecial = false) {
+    if (document.hidden) return this.scheduleRing();
     // never start a new call while one is still on the line or its result is showing
     if (!this.isCallback() && (this.callActive() || this.result)) return this.scheduleRing();
     if (!this.isCallback()) CALLS.newCall(forceSpecial);
@@ -88,6 +89,7 @@ const OFFICE = {
   },
   /* Auto Reply: pick up and handle the call for a smaller fixed bonus */
   autoHandle() {
+    if (document.hidden) return;
     if (!this.ringing || (CALLS.call && CALLS.call.special)) return;
     this.ringing = false;
     const phone = document.getElementById('o-phone');
@@ -182,6 +184,7 @@ const OFFICE = {
     if (!this.ringing && !this.callActive() && !this.result && !this._ringT) this.scheduleRing();
   },
   tick() {
+    if (document.hidden) return;
     if (this.ringing) {
       if (--this.ringLeft <= 0) {
         this.ringing = false;
