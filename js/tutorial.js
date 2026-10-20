@@ -26,7 +26,7 @@ const TUTORIAL = {
         text: 'Tap the <b>handset</b> to answer the call.',
         wait: () => call() && call().state === 'live' },
       { target: '#o-call', title: 'Listen to the caller',
-        text: `The highlighted word tells you what the call is about. This caller wants <b>${T.keyword}</b>.` },
+        text: `The highlighted word tells you what the call is about. This call is about <b>${T.keyword}</b>.` },
       { target: '[data-fn="hold"]', title: 'Put them on hold',
         text: 'Always press <b>HOLD</b> before checking who can take the call.',
         wait: () => call() && call().state === 'hold' },
@@ -34,7 +34,7 @@ const TUTORIAL = {
         text: `Open <b>Memo</b> on the computer to see who handles "${T.keyword}".`,
         wait: () => PC.isOpen() && PC.tab === 'memo' },
       { target: '#pc-panel', title: 'Memo',
-        text: `"${T.keyword}" is on the <b>${staff.title}</b> row → <b>${staff.name}</b>, extension <b>${staff.ext}</b>.` },
+        text: `"${T.keyword}" is handled by <b>${staff.title}</b> → <b>${staff.name}</b>, check their extension from the <b>Phone Book</b>, in this case: <b>${staff.ext}</b>.` },
       { target: '.pc-tabs [data-tab="messenger"]', title: 'Check their status',
         text: `Open <b>Messenger</b> to see if ${staff.name} can take calls.`,
         wait: () => PC.isOpen() && PC.tab === 'messenger' },
@@ -42,8 +42,8 @@ const TUTORIAL = {
         text: `${staff.name} has a <b class="tut-g">green dot = Available</b>, so you can transfer straight away.
           <ul class="tut-list">
             <li><i class="st-dot st-busy"></i> Busy → message “Call coming in now”, wait for 👍, then transfer</li>
-            <li><i class="st-dot st-dnd"></i> Do Not Disturb → message “Call back when you are available”, un-HOLD, tell the caller</li>
-            <li><i class="st-dot st-away"></i> Away → message, transfer if they come back, otherwise tell the caller</li>
+            <li><i class="st-dot st-dnd"></i> Do Not Disturb → message “Call back when you are available”, un-HOLD, tell the caller to call back later</li>
+            <li><i class="st-dot st-away"></i> Away → message, transfer if they come back, otherwise tell the caller to call back later</li>
             <li><i class="st-dot st-off-demo"></i> No dot (Offline) → un-HOLD, ask them to call back another day</li>
           </ul>` },
       { target: '[data-fn="transfer"]', title: 'Transfer the call', enter: () => PC.close(),
