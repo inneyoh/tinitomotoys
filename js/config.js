@@ -24,7 +24,7 @@ const CONFIG = {
   OFFLINE: {
     CALL_EVERY_MIN: 10,       // one auto-answered call per this many minutes away
     REWARD: 3,                // $ per offline call
-    MAX_HOURS: 14,            // time away that still counts
+    MAX_HOURS: 20,            // time away that still counts
     MIN_AWAY_S: 60,           // shorter breaks don't count
   }, // Auto Reply stays locked until this many gacha pulls
   CALLER_PATIENCE_S: 90,      // caller hangs up after this long
