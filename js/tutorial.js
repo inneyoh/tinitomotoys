@@ -35,7 +35,7 @@ const TUTORIAL = {
         text: `Open <b>Memo</b> on the computer to see who handles "${T.keyword}".`,
         wait: () => PC.isOpen() && PC.tab === 'memo' },
       { target: '#pc-panel', title: 'Memo',
-        text: `"${T.keyword}" is handled by <b>${staff.title}</b>, <b>${staff.name}</b>.},
+        text: `"${T.keyword}" is handled by <b>${staff.title}</b>, <b>${staff.name}</b>.`},
       { target: '.pc-tabs [data-tab="messenger"]', title: 'Check their status',
         text: `Open <b>Messenger</b> to see if ${staff.name} can take calls.`,
         wait: () => PC.isOpen() && PC.tab === 'messenger' },
@@ -47,8 +47,9 @@ const TUTORIAL = {
             <li><i class="st-dot st-away"></i> Away → message, transfer if they come back, otherwise tell the caller to call back later</li>
             <li><i class="st-dot st-off-demo"></i> No dot (Offline) → un-HOLD, ask them to call back another day</li>
           </ul>` },
-{target: '#pc-panel', title: 'Phone Book',
-text: `Time to check their extension from the <b>Phone Book</b>, <b>${staff.name}</b>'s extension is <b>${staff.ext}</b>.` 
+{target: '.pc-tabs [data-tab="phonebook"]',
+ title: 'Phone Book',
+text: `Open <b>Phone Book</b> to check the extension. <b>${staff.name}</b>'s extension is <b>${staff.ext}</b>.`, 
 wait: () => PC.isOpen() && PC.tab === 'phonebook'},
    
       { target: '[data-fn="transfer"]', title: 'Transfer the call', enter: () => PC.close(),
@@ -194,7 +195,7 @@ wait: () => PC.isOpen() && PC.tab === 'phonebook'},
     if (!this.active) return;
     const el = document.getElementById('tut'), s = this.list[this.i];
     el.classList.toggle('behind', UI.isModalOpen());   // let the 360° viewer show on top
-    if (this.i >= 2 && this.i <= 10) {
+    if (this.i >= 2 && this.i <= 11) {
       if (OFFICE.ringing) OFFICE.ringLeft = CONFIG.RING_TIMEOUT_S;            // no missed call
       if (CALLS.call) CALLS.call.patience = CONFIG.CALLER_PATIENCE_S;          // caller never hangs up
       if (!CALLS.call && !OFFICE.ringing && !OFFICE.result) { this.i = 2; this.show(); }   // lost it → ring again
