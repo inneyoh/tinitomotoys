@@ -49,8 +49,12 @@ const TUTORIAL = {
           </ul>` },
 {target: '.pc-tabs [data-tab="phonebook"]',
  title: 'Phone Book',
-text: `Open <b>Phone Book</b> to check the extension. <b>${staff.name}</b>'s extension is <b>${staff.ext}</b>.`, 
+text: `Open <b>Phone Book</b> to check <b>${staff.name}</b>'s extension.`, 
 wait: () => PC.isOpen() && PC.tab === 'phonebook'},
+{target: '#pc-body .pc-table',
+title: 'Find the extension',
+text: `Find <b>${staff.name}</b> in the Phone Book for their extension. Press <b>Next</b> when you are ready to transfer.`
+},
    
       { target: '[data-fn="transfer"]', title: 'Transfer the call', enter: () => PC.close(),
         text: 'Press <b>XFER</b> to start a transfer.',
@@ -195,7 +199,7 @@ wait: () => PC.isOpen() && PC.tab === 'phonebook'},
     if (!this.active) return;
     const el = document.getElementById('tut'), s = this.list[this.i];
     el.classList.toggle('behind', UI.isModalOpen());   // let the 360° viewer show on top
-    if (this.i >= 2 && this.i <= 11) {
+    if (this.i >= 2 && this.i <= 12) {
       if (OFFICE.ringing) OFFICE.ringLeft = CONFIG.RING_TIMEOUT_S;            // no missed call
       if (CALLS.call) CALLS.call.patience = CONFIG.CALLER_PATIENCE_S;          // caller never hangs up
       if (!CALLS.call && !OFFICE.ringing && !OFFICE.result) { this.i = 2; this.show(); }   // lost it → ring again
