@@ -18,7 +18,7 @@ const CONFIG = {
   CALL_REWARD: 10,             // $ for a call handled correctly (performance bonus)
   MISTAKE_PENALTY: 3,         // $ taken off that call's reward per mistake
   AUTO_REPLY_REWARD: 3,       // $ per call when Auto Reply handles it for you
-  AUTO_REPLY_UNLOCK_PULLS: 30,
+  AUTO_REPLY_UNLOCK_PULLS: 20,
   /* Auto Reply while the game is closed (js/offline.js):
      1 call every 28 min × $3, up to 14 hours away = max $90 */
   OFFLINE: {
@@ -30,7 +30,7 @@ const CONFIG = {
   CALLER_PATIENCE_S: 90,      // caller hangs up after this long
   AWAY_RETURN_CHANCE: 0.5,    // chance an "Away" staff comes back after your message
   REPLY_DELAY_MS: [1200, 2400],   // how long staff take to react 👍
-  AWAY_RETURN_MS: [3000, 6000],   // how long an Away staff takes to come back
+  AWAY_RETURN_MS: [1500, 3000],   // how long an Away staff takes to come back
   /* how often each status appears (relative weights) */
   STATUS_WEIGHTS: { available: 35, busy: 25, dnd: 15, away: 15, offline: 10 },
   STATUSES: {
