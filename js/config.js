@@ -110,7 +110,7 @@ const CONFIG = {
 
   /* ---------- 3. GACHA ---------- */
   PULL_OPTIONS: [1, 5],
-  KNOB_SPIN_MS: 200,          // time for one full knob turn (auto spin)
+  KNOB_SPIN_MS: 350,          // time for one full knob turn (auto spin)
   BALL_COLORS: ['#ff9fb6', '#8fd3c1', '#ffd166', '#9ec9f5', '#c9b3f0'],
 
   /* ---------- 4. RARITY ----------
