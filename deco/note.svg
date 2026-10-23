@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-22 -22 244 244">
+<defs></defs>
+<g fill="#E0D6CA" stroke="#E0D6CA" stroke-width="40" stroke-linejoin="round"><ellipse cx="62" cy="150" rx="30" ry="24" transform="rotate(-20 62 150)"/><ellipse cx="142" cy="132" rx="30" ry="24" transform="rotate(-20 142 132)"/><rect x="78" y="40" width="14" height="112"/><rect x="158" y="24" width="14" height="110"/><polygon points="78,40 172,22 172,56 78,74"/></g>
+<g fill="#fff" stroke="#fff" stroke-width="35" stroke-linejoin="round"><ellipse cx="62" cy="150" rx="30" ry="24" transform="rotate(-20 62 150)"/><ellipse cx="142" cy="132" rx="30" ry="24" transform="rotate(-20 142 132)"/><rect x="78" y="40" width="14" height="112"/><rect x="158" y="24" width="14" height="110"/><polygon points="78,40 172,22 172,56 78,74"/></g>
+<g fill="#5c341e" stroke="#5c341e" stroke-width="12" stroke-linejoin="round"><ellipse cx="62" cy="150" rx="30" ry="24" transform="rotate(-20 62 150)"/><ellipse cx="142" cy="132" rx="30" ry="24" transform="rotate(-20 142 132)"/><rect x="78" y="40" width="14" height="112"/><rect x="158" y="24" width="14" height="110"/><polygon points="78,40 172,22 172,56 78,74"/></g>
+<g fill="#c7b8ff" stroke="none"><ellipse cx="62" cy="150" rx="30" ry="24" transform="rotate(-20 62 150)"/><ellipse cx="142" cy="132" rx="30" ry="24" transform="rotate(-20 142 132)"/><rect x="78" y="40" width="14" height="112"/><rect x="158" y="24" width="14" height="110"/><polygon points="78,40 172,22 172,56 78,74"/></g>
+
+<ellipse cx="74" cy="72" rx="13" ry="8" fill="#fff" opacity=".55" transform="rotate(-30 74 72)"/>
+</svg>

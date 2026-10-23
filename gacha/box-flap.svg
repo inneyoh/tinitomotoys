@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+<path d="M8 56V18Q8 6 22 6h156q14 0 14 12v38" fill="#ffc3d2" stroke="#5c341e" stroke-width="6" stroke-linejoin="round"/>
+<path d="M14 54h172" stroke="#5c341e" stroke-width="4" stroke-dasharray="8 7"/>
+<text x="100" y="40" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="17" fill="#fff" stroke="#5c341e" stroke-width="1">✂ TEAR ↑</text>
+</svg>
