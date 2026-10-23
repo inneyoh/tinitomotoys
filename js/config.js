@@ -170,7 +170,7 @@ const CONFIG = {
   },
 
   /* ---------- 7. STICKER BOOK ---------- */
-  BOOK_PAGES: 6,              // page 0 = front cover, then inner pages
+  BOOK_PAGES: 21,              // page 0 = front cover, then inner pages
   STICKER_SIZE: 0.3,          // default sticker width as fraction of the page width
   STICKER_SCALE_MIN: 0.45,
   STICKER_SCALE_MAX: 2.2,
