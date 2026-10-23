@@ -29,6 +29,10 @@ const SAVE = {
       marketUnlocked: false,          // Sticker Market app (PC)
       market: null,                   // { plans: [...], at: time offers were made }
       tutorialDone: false,            // finished or skipped the new-player tutorial
+      acc: { deco: {}, pens: [], books: ['classic'] },   // accessory shop: deco copies, pens + books owned
+      bookStyle: 'classic',           // sticker book look (CONFIG.SHOP.books)
+      ink: Array.from({ length: CONFIG.BOOK_PAGES }, () => []),
+      //  ink[page] = [{ pen, pts: [x, y, x, y, …] }]   x/y = 0..1000 of the page width/height
       parked: [],                     // book stickers whose sticker is missing from CONFIG (kept, not lost)
     };
   },
@@ -70,7 +74,7 @@ const SAVE = {
     if (!isObj(d.calls)) d.calls = { ok: 0, bad: 0 };
     // book + top loaders: stickers missing from CONFIG (renamed / removed for now) are parked
     // in d.parked instead of deleted, and put back automatically once the sticker exists again
-    const known = k => typeof k === 'string' && !!CONFIG.parse(k).s;
+    const known = k => typeof k === 'string' && (CONFIG.isDeco(k) ? !!CONFIG.shopItem('deco', k.slice(5)) : !!CONFIG.parse(k).s);
     const parked = Array.isArray(d.parked) ? d.parked : [];
     const b = (Array.isArray(d.book) ? d.book : []).map(p => Array.isArray(p) ? p : []);
     while (b.length < CONFIG.BOOK_PAGES) b.push([]);
@@ -84,6 +88,16 @@ const SAVE = {
       if (e.st && known(e.st.key) && e.page < CONFIG.BOOK_PAGES) { d.book[e.page].push(e.st); return false; }
       return true;
     });
+    // accessories + pen ink
+    if (!isObj(d.acc)) d.acc = { deco: {}, pens: [], books: ['classic'] };
+    if (!isObj(d.acc.deco)) d.acc.deco = {};
+    if (!Array.isArray(d.acc.pens)) d.acc.pens = [];
+    if (!Array.isArray(d.acc.books)) d.acc.books = [];
+    if (!d.acc.books.includes('classic')) d.acc.books.unshift('classic');
+    if (!d.acc.books.includes(d.bookStyle)) d.bookStyle = 'classic';
+    const ink = (Array.isArray(d.ink) ? d.ink : []).slice(0, CONFIG.BOOK_PAGES).map(p => Array.isArray(p) ? p.filter(s => s && Array.isArray(s.pts)) : []);
+    while (ink.length < CONFIG.BOOK_PAGES) ink.push([]);
+    d.ink = ink;
     d.topLoaders = this.fit(d.topLoaders, CONFIG.TOP_LOADER_SLOTS).map(k => known(k) ? k : null);
     if (d.favourite && !CONFIG.sticker(d.favourite)) d.favourite = null;
     return d;
@@ -148,7 +162,7 @@ const SAVE = {
   /* market trades: add / remove stickers without counting as gacha pulls */
   giveSticker(key, n = 1) { this.data.inventory[key] = (this.data.inventory[key] || 0) + n; this.save(); },
   takeSticker(key, n = 1) { this.data.inventory[key] = Math.max(0, (this.data.inventory[key] || 0) - n); this.save(); },
-  owned(key) { return this.data.inventory[key] || 0; },
+  owned(key) { return CONFIG.isDeco(key) ? (this.data.acc.deco[key.slice(5)] || 0) : (this.data.inventory[key] || 0); },
   /* ever obtained (still true after trading every copy away) */
   obtained(key) { return key in this.data.inventory; },
   ownedKeys() {
