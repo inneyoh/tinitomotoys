@@ -743,19 +743,13 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 .b-page {
   position: absolute; inset: 0; overflow: hidden; container-type: size;
   border-radius: 1.2cqh 2.2cqh 2.2cqh 1.2cqh; border: 4px solid var(--ink);
-  background:
-    radial-gradient(circle, #e8dccb 1.2px, transparent 1.6px) 0 0 / 5.5cqw 5.5cqw,
-    linear-gradient(90deg, #efe4d4, #fffaf2 8%, #fffaf2);
-  box-shadow: 0 10px 0 rgba(92, 52, 30, .18), 6px 6px 0 #f3e6d4, 6px 6px 0 4px var(--ink);
+  background: var(--paper);       /* book look: section 12 */
+  box-shadow: 0 10px 0 rgba(92, 52, 30, .18), 6px 6px 0 var(--edge), 6px 6px 0 4px var(--ink);
   transform-origin: 0 50%; touch-action: none;
 }
-.b-page.cover {
-  background:
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .35), transparent 45%),
-    linear-gradient(150deg, #ffb7c9, #ff9fb9 55%, #f58aa8);
-}
+.b-page.cover { background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .35), transparent 45%), var(--cover); }
 .b-page.cover::before {   /* stitched border */
-  content: ''; position: absolute; inset: 3.5cqw; border: .7cqw dashed rgba(255, 255, 255, .8); border-radius: 3cqw; pointer-events: none;
+  content: ''; position: absolute; inset: 3.5cqw; border: .7cqw dashed var(--stitch); border-radius: 3cqw; pointer-events: none;
 }
 .b-cover-label {
   position: absolute; left: 18%; right: 18%; top: 10%; padding: 2.5cqw 0; display: none;
@@ -1100,3 +1094,141 @@ body.caller-talking .pc-callnote::after {
 .tut-skip { background: none; border: 0; color: var(--ink-soft); font: inherit; font-size: 13px; text-decoration: underline; cursor: pointer; padding: 6px 0; }
 .tut-next { min-width: 92px; }
 #tut.waiting .tut-actions { justify-content: flex-start; }
+
+/* ==================== 12. ACCESSORY SHOP + BOOK CUSTOMISING (js/shop.js, js/book.js) ====================
+   Book looks: every .book-<id> sets 4 colours used by the sticker book
+     --cover  front cover   --paper  inner pages   --stitch  cover stitching   --edge  page stack edge
+   Small motifs are inline SVGs (no image files needed).                                              */
+.b-book, .book-prev {
+  --dots: #e8dccb; --paper-c: #fffaf2; --paper-side: #efe4d4;
+  --paper: radial-gradient(circle, var(--dots) 1.2px, transparent 1.6px) 0 0 / 5.5cqw 5.5cqw, linear-gradient(90deg, var(--paper-side), var(--paper-c) 8%, var(--paper-c));
+  --cover: linear-gradient(150deg, #ffb7c9, #ff9fb9 55%, #f58aa8);
+  --stitch: rgba(255, 255, 255, .8); --edge: #f3e6d4;
+}
+/* colour variations ($15) */
+.book-mint     { --cover: linear-gradient(150deg, #c4f0de, #94dcc1 55%, #72c9a8); --dots: #cde6da; --paper-c: #f5fffa; --paper-side: #dcefe5; --edge: #d9efe4; }
+.book-lavender { --cover: linear-gradient(150deg, #e3d4ff, #c9b2f5 55%, #b39af0); --dots: #ddd2ef; --paper-c: #faf7ff; --paper-side: #e9e1f6; --edge: #e6ddf5; }
+.book-sky      { --cover: linear-gradient(150deg, #d3eaff, #a9d2fb 55%, #85bcf0); --dots: #d3e2f0; --paper-c: #f5faff; --paper-side: #e0ebf6; --edge: #dbe8f5; }
+.book-butter   { --cover: linear-gradient(150deg, #fff3c2, #ffe08a 55%, #f6cb5c); --dots: #eee0b4; --paper-c: #fffcef; --paper-side: #f5ecd0; --edge: #f3e7c2; }
+/* special designs ($25) — pattern sizes are % of the page (width% height%, page is 3:4) so they scale with the book */
+.book-strawberry {
+  --cover:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 34c-8-4-11-11-10-15 1-4 5-5 10-4 5-1 9 0 10 4 1 4-2 11-10 15z' fill='%23ff7b8f' stroke='%235c341e' stroke-width='2'/%3E%3Cpath d='M14 15l6-5 6 5-6 2z' fill='%238fd18a' stroke='%235c341e' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 6% 4% / 25% 18.75%,
+    linear-gradient(90deg, rgba(255, 120, 150, .38) 50%, transparent 0) 0 0 / 12.5% 100%,
+    linear-gradient(0deg, rgba(255, 120, 150, .38) 50%, transparent 0) 0 0 / 100% 9.375%, #fff4f6;
+  --paper:
+    linear-gradient(90deg, rgba(255, 150, 175, .13) 50%, transparent 0) 0 0 / 8% 100%,
+    linear-gradient(0deg, rgba(255, 150, 175, .13) 50%, transparent 0) 0 0 / 100% 6%,
+    linear-gradient(90deg, #f6e3e7, #fffafb 8%);
+  --stitch: #ff8fab; --edge: #f8dde3;
+}
+.book-starry {
+  --cover:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 8l3.5 8 8.5 1-6.3 6 1.8 8.5-7.5-4.5-7.5 4.5 1.8-8.5-6.3-6 8.5-1z' fill='%23ffe08a'/%3E%3Ccircle cx='34' cy='34' r='1.6' fill='%23fff'/%3E%3Ccircle cx='6' cy='30' r='1.2' fill='%23fff'/%3E%3C/svg%3E") 0 0 / 20% 15%,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='1.5' fill='%23fff' opacity='.8'/%3E%3C/svg%3E") 7% 5% / 12% 9%,
+    linear-gradient(160deg, #2e3272, #403b8f 60%, #5b4aa3);
+  --paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 12l2.4 5.4 5.6.6-4.2 4 1.2 5.6-5-3-5 3 1.2-5.6-4.2-4 5.6-.6z' fill='%23e3dcff'/%3E%3C/svg%3E") 0 0 / 14% 10.5%, linear-gradient(90deg, #e6e2f6, #f9f8ff 8%);
+  --stitch: #ffe08a; --edge: #e2def3;
+}
+.book-pudding {
+  --cover:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M11 30 L14 14 Q20 10 26 14 L29 30 Z' fill='%23ffd66b' stroke='%235c341e' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M14 14 Q20 10 26 14 L25.5 18 Q20 15 14.5 18 Z' fill='%23a0581e'/%3E%3Cellipse cx='20' cy='31' rx='12' ry='3' fill='%23fff' stroke='%235c341e' stroke-width='2'/%3E%3C/svg%3E") 2% 30% / 24% 18%,
+    radial-gradient(ellipse 50% 100% at 50% 0, #a0581e 97%, transparent 100%) 0 0 / 20% 9% repeat-x,
+    linear-gradient(#a0581e, #a0581e) 0 0 / 100% 4% no-repeat,
+    linear-gradient(#ffe6a6, #ffd77e);
+  --paper: radial-gradient(circle, #f1d9a8 22%, transparent 26%) 0 0 / 6% 4.5%, linear-gradient(90deg, #f2e2c4, #fffaf0 8%);
+  --stitch: #fff8ef; --edge: #f1e1c0;
+}
+.b-page.restyle { animation: slap .45s cubic-bezier(.3, 1.6, .5, 1); }
+
+/* mini book (shop + Books tab) */
+.book-prev { width: 62%; aspect-ratio: 3 / 4; position: relative; container-type: size; }
+.bp-cover {
+  position: absolute; inset: 0; background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .35), transparent 45%), var(--cover);
+  border: 2.5px solid var(--ink); border-radius: 4px 10px 10px 4px; box-shadow: 3px 3px 0 var(--edge), 3px 3px 0 2.5px var(--ink);
+}
+.bp-cover::before { content: ''; position: absolute; inset: 7%; border: 1.5px dashed var(--stitch); border-radius: 6px; }
+.bp-cover i { position: absolute; left: 20%; right: 20%; top: 14%; height: 16%; background: #fff8ef; border: 2px solid var(--ink); border-radius: 4px; }
+
+/* deco (shop) stickers on the page / tray */
+.stk.deco.shiny .stk-sheen { background-image: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, .95) 42%, #fff5a8 48%, #9fd8ff 54%, transparent 66%); mix-blend-mode: normal; opacity: .6; }
+.b-st.is-deco .b-view { display: none; }
+
+/* pen ink */
+.b-ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.b-ink .ink { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.b-ink .ink-highlighter { stroke-opacity: .5; mix-blend-mode: multiply; stroke-linecap: square; }
+.b-ink .ink-shiny { filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, .9)) drop-shadow(0 1px 1px rgba(92, 52, 30, .25)); }
+.ink-glitter { animation: glitter 1.2s linear infinite; }
+@keyframes glitter { to { stroke-dashoffset: -24; } }
+.b-draw { position: absolute; inset: 0; display: none; cursor: crosshair; touch-action: none; }
+.b-page.drawing .b-draw { display: block; }
+.b-page.erasing .b-draw { cursor: cell; }
+.b-page.drawing { outline: 4px dashed var(--pink-deep); outline-offset: -10px; }
+
+/* tray tabs + shop button */
+.b-tray-head { display: flex; align-items: center; gap: 8px; }
+.b-tabs { display: flex; gap: 4px; flex: 1; min-width: 0; }
+.b-tabs button {
+  flex: 1; min-width: 0; padding: 4px 2px; border-radius: 12px 12px 6px 6px; font: inherit; font-weight: 900; font-size: 12px; line-height: 1.1;
+  background: #fff; border: 3px solid var(--ink); color: var(--ink); opacity: .7; white-space: nowrap;
+  display: flex; flex-direction: column; gap: 1px; align-items: center; justify-content: center;   /* emoji on top, label below */
+}
+.b-tabs button.on { background: var(--pink); opacity: 1; box-shadow: 0 3px 0 rgba(92, 52, 30, .25); }
+.b-shop-btn {
+  flex: 0 0 auto; padding: 5px 12px; border-radius: 99px; font: inherit; font-weight: 900; font-size: 15px;
+  background: var(--butter); border: 3px solid var(--ink); box-shadow: 0 3px 0 rgba(92, 52, 30, .3); color: var(--ink);
+}
+.b-tray-title { min-height: 1em; line-height: 1; }
+.b-item.on { background: #fff0f4; box-shadow: 0 0 0 3px var(--pink-deep); }
+.b-pen .b-item-art, .b-tool .b-item-art { width: 100%; }
+.b-pen .pen-swatch { width: 90%; height: 100%; }
+.b-tool { cursor: pointer; background: #fffaf2; }
+.b-tool b { font-size: 30px; }
+.b-bookitem .b-item-art { width: 100%; }
+.b-bookitem.locked .book-prev { filter: grayscale(.35) opacity(.7); }
+.tab-pens .b-item, .tab-books .b-item { cursor: pointer; }
+
+/* shop window */
+.modal-card.shop-card { width: min(620px, 100%); }
+.modal-title b.shop-wallet { color: #2f9e6b; }
+.shop-tabs { display: flex; gap: 6px; justify-content: center; margin-top: 10px; }
+.shop-tabs button { flex: 1; max-width: 150px; padding: 7px 6px; border-radius: 99px; font: inherit; font-weight: 900; font-size: 15px; background: #fff; border: 3px solid var(--ink); color: var(--ink); }
+.shop-tabs button.on { background: var(--pink); }
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; margin-top: 12px; }
+.shop-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 6px 10px; border-radius: 16px; text-align: center;
+  background: #fff; border: 3px solid var(--ink); box-shadow: 0 4px 0 rgba(92, 52, 30, .2);
+}
+.shop-art { height: 84px; width: 100%; display: grid; place-items: center; }
+.shop-art .stk { width: 76px; }
+.shop-art .pen-swatch { width: 92%; height: 70px; }
+.shop-art .book-prev { width: auto; height: 84px; }
+.shop-name { font-weight: 900; font-size: 14px; line-height: 1.1; }
+.shop-tag { font-size: 11px; font-weight: 800; padding: 0 7px; border-radius: 99px; background: #f1e8dc; color: var(--ink-soft); }
+.shop-tag.shiny { background: linear-gradient(90deg, #ffd1dc, #fff3b0, #c9f0e1, #cfe0ff); color: var(--ink); }
+.shop-tag.special { background: var(--butter); color: var(--ink); }
+.shop-have { font-size: 11px; font-weight: 800; color: #2f9e6b; }
+.shop-buy { margin-top: 4px; padding: 4px 16px; font-size: 15px; background: var(--mint); }
+.shop-buy.poor { background: #eee; color: #a08a7c; }
+.shop-buy:disabled { background: #fff; color: #2f9e6b; box-shadow: none; }
+.shop-item.owned { background: #f7fff9; }
+
+@media (orientation: portrait) {
+  .b-tray-head { gap: 5px; }
+  .b-tabs button { font-size: 9px; padding: 2px 1px; border-width: 2.5px; }
+  .b-tabs button span { display: none; }      /* phone: icons only */
+  .b-tabs button.on span { display: inline; } /* …except the open tab */
+  .b-shop-btn { font-size: 12px; padding: 3px 9px; border-width: 2.5px; }
+  .b-tray-title { display: none; }
+  .b-pen .pen-swatch { height: 100%; }
+  .b-tool b { font-size: 22px; }
+  .tab-pens .b-item-info span, .tab-books .b-item-info span { display: inline; font-size: 9px; }
+  .tab-books .b-item-info small { font-size: 9px; }
+  .shop-grid { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .shop-item { padding: 6px 4px 8px; }
+  .shop-art { height: 64px; }
+  .shop-art .stk { width: 60px; }
+  .shop-art .book-prev { height: 64px; }
+  .shop-name { font-size: 12px; }
+}

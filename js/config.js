@@ -175,6 +175,53 @@ const CONFIG = {
   STICKER_SCALE_MIN: 0.45,
   STICKER_SCALE_MAX: 2.2,
 
+  /* ---------- 7b. ACCESSORY SHOP (paid in $, not coins) ----------
+     Bought in the Shop (📔 sticker book screen → 🛍 Shop), used from the
+     book's Deco / Pens / Books tabs.
+       deco  : generic stickers (art = assets/deco/<id>.svg). Each buy = 1 copy,
+               a copy is used up while it is on a page (like gacha stickers)
+       pens  : bought once, draw as much as you like
+       books : bought once, changes the look of the whole sticker book          */
+  SHOP: {
+    deco: [
+      { id: 'heart',      name: 'Heart',        price: 3 },
+      { id: 'star',       name: 'Star',         price: 3 },
+      { id: 'flower',     name: 'Flower',       price: 3 },
+      { id: 'cloud',      name: 'Cloud',        price: 3 },
+      { id: 'bow',        name: 'Ribbon',       price: 3 },
+      { id: 'note',       name: 'Music Note',   price: 3 },
+      { id: 'holo-heart', name: 'Holo Heart',   price: 5, shiny: true },
+      { id: 'gold-star',  name: 'Gold Star',    price: 5, shiny: true },
+      { id: 'sparkle',    name: 'Holo Sparkle', price: 5, shiny: true },
+      { id: 'crown',      name: 'Gold Crown',   price: 5, shiny: true },
+      { id: 'rainbow',    name: 'Rainbow',      price: 5, special: true },
+      { id: 'strawberry', name: 'Strawberry',   price: 5, special: true },
+    ],
+    // width = stroke width (fraction of the page width); kind: matte | highlighter | shiny
+    pens: [
+      { id: 'cocoa',     name: 'Cocoa Pen',          price: 7, kind: 'matte',       color: '#5c341e', width: 0.012 },
+      { id: 'berry',     name: 'Berry Pen',          price: 7, kind: 'matte',       color: '#ff6f91', width: 0.012 },
+      { id: 'sky',       name: 'Sky Pen',            price: 7, kind: 'matte',       color: '#5c9ae0', width: 0.012 },
+      { id: 'hl-lemon',  name: 'Lemon Highlighter',  price: 7, kind: 'highlighter', color: '#ffe45c', width: 0.05 },
+      { id: 'hl-mint',   name: 'Mint Highlighter',   price: 7, kind: 'highlighter', color: '#8ff0c8', width: 0.05 },
+      { id: 'gold',      name: 'Gold Glitter Pen',   price: 9, kind: 'shiny', colors: ['#f7c948', '#fff7d6', '#e6a91c'], width: 0.016 },
+      { id: 'holo',      name: 'Holo Pen',           price: 9, kind: 'shiny', colors: ['#ff9aa2', '#ffe08a', '#8fe3c7', '#9fc8ff', '#c7a8ff'], width: 0.016 },
+      { id: 'silver',    name: 'Silver Sparkle Pen', price: 9, kind: 'shiny', colors: ['#aab5c6', '#ffffff', '#8f99a6'], width: 0.016 },
+    ],
+    // look = CSS class "book-<id>" in style.css (section 11)
+    books: [
+      { id: 'classic',    name: 'Classic Pink',     price: 0 },             // everyone starts with this
+      { id: 'mint',       name: 'Mint',             price: 15 },
+      { id: 'lavender',   name: 'Lavender',         price: 15 },
+      { id: 'sky',        name: 'Sky Blue',         price: 15 },
+      { id: 'butter',     name: 'Butter',           price: 15 },
+      { id: 'strawberry', name: 'Strawberry Picnic', price: 25, special: true },
+      { id: 'starry',     name: 'Starry Night',     price: 25, special: true },
+      { id: 'pudding',    name: 'Pudding Cafe',     price: 25, special: true },
+    ],
+  },
+  INK_MAX_POINTS: 5000,       // pen ink per page (keeps the save small)
+
   /* ---------- 8. SCENES ---------- */
   SCENES: ['office', 'gacha', 'book'],
   SWIPE_THRESHOLD: 0.18,      // drag this fraction of the screen to change scene
@@ -194,3 +241,8 @@ CONFIG.staffByExt = ext => CONFIG.STAFF.find(s => s.ext === ext);
 CONFIG.img = (id, file = 'front') => `assets/stickers/${id}/${file}.png`;
 CONFIG.key = (id, rarity) => `${id}:${rarity}`;
 CONFIG.parse = key => { const [id, rarity] = key.split(':'); return { id, rarity, s: CONFIG.sticker(id), r: CONFIG.RARITIES[rarity] }; };
+
+/* accessory shop items: CONFIG.shopItem('deco', 'heart'); deco stickers on a page use key "deco:<id>" */
+CONFIG.shopItem = (type, id) => CONFIG.SHOP[type].find(x => x.id === id);
+CONFIG.isDeco = key => typeof key === 'string' && key.startsWith('deco:');
+CONFIG.decoImg = id => `assets/deco/${id}.svg`;
