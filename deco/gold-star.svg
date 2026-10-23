@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-22 -22 244 244">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b8"/><stop offset=".35" stop-color="#f7c948"/><stop offset=".55" stop-color="#fff7d6"/><stop offset=".75" stop-color="#e6a91c"/><stop offset="1" stop-color="#ffe08a"/></linearGradient></defs>
-<g fill="#E0D6CA" stroke="#E0D6CA" stroke-width="40" stroke-linejoin="round"><polygon points="100.0,22.0 122.3,75.3 179.9,80.0 136.1,117.7 149.4,174.0 100.0,144.0 50.6,174.0 63.9,117.7 20.1,80.0 77.7,75.3" stroke-linejoin="round"/></g>
-<g fill="#fff" stroke="#fff" stroke-width="35" stroke-linejoin="round"><polygon points="100.0,22.0 122.3,75.3 179.9,80.0 136.1,117.7 149.4,174.0 100.0,144.0 50.6,174.0 63.9,117.7 20.1,80.0 77.7,75.3" stroke-linejoin="round"/></g>
-<g fill="#5c341e" stroke="#5c341e" stroke-width="12" stroke-linejoin="round"><polygon points="100.0,22.0 122.3,75.3 179.9,80.0 136.1,117.7 149.4,174.0 100.0,144.0 50.6,174.0 63.9,117.7 20.1,80.0 77.7,75.3" stroke-linejoin="round"/></g>
-<g fill="url(#g)" stroke="none"><polygon points="100.0,22.0 122.3,75.3 179.9,80.0 136.1,117.7 149.4,174.0 100.0,144.0 50.6,174.0 63.9,117.7 20.1,80.0 77.7,75.3" stroke-linejoin="round"/></g>
-
-<ellipse cx="74" cy="72" rx="13" ry="8" fill="#fff" opacity=".55" transform="rotate(-30 74 72)"/>
-</svg>
