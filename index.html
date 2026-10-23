@@ -15,7 +15,8 @@
      js/market.js        → Scene 1: Sticker Market app (trade stickers)
      js/office.js        → Scene 1: office desk + telephone controls
      js/gacha.js         → Scene 2: gacha machine + blindboxes
-     js/book.js          → Scene 3: sticker book
+     js/shop.js          → Scene 3: Accessory Shop (deco stickers, pens, books — paid in $)
+     js/book.js          → Scene 3: sticker book (+ Deco / Pens / Books tabs)
      js/offline.js       → Auto Reply earnings while the game is closed
      js/main.js          → boots everything
      assets/             → all images (stickers, office, gacha, book, ui, icon)
@@ -186,7 +187,9 @@
             <!-- front cover decoration -->
             <div class="b-cover-label"><small>TiniTomo Toys</small>Sticker Book</div>
             <div class="b-pageno" id="b-pageno"></div>
+            <svg class="b-ink" id="b-ink"></svg>         <!-- pen drawings (under the stickers) -->
             <div class="b-layer" id="b-layer"></div>   <!-- placed stickers go here -->
+            <div class="b-draw" id="b-draw"></div>     <!-- catches drawing while a pen is picked -->
           </div>
           <div class="b-rings"><i></i><i></i><i></i><i></i></div>
         </div>
@@ -196,7 +199,16 @@
           <button id="b-next" aria-label="next page">▶</button>
         </div>
         <div class="b-tray" data-nodrag>
-          <div class="b-tray-title">My Stickers <small id="b-count"></small></div>
+          <div class="b-tray-head">
+            <div class="b-tabs" id="b-tabs">
+              <button data-tab="stickers" class="on">✨<span>Stickers</span></button>
+              <button data-tab="deco">💗<span>Deco</span></button>
+              <button data-tab="pens">🖊<span>Pens</span></button>
+              <button data-tab="books">📔<span>Books</span></button>
+            </div>
+            <button class="b-shop-btn" id="b-shop">🛍 Shop</button>
+          </div>
+          <div class="b-tray-title"><small id="b-count"></small></div>
           <div class="b-tray-list" id="b-tray"></div>
         </div>
       </div>
@@ -235,6 +247,7 @@
 <script src="js/pc.js"></script>
 <script src="js/office.js"></script>
 <script src="js/gacha.js"></script>
+<script src="js/shop.js"></script>
 <script src="js/book.js"></script>
 <script src="js/offline.js"></script>
 <script src="js/audio.js"></script>
